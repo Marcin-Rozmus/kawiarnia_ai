@@ -79,9 +79,7 @@ class CoffeeShopGUI:
     def create_interface(self):
         """Tworzy interfejs Gradio"""
         with gr.Blocks(
-            title="☕ Kawiarnia AI - Asystent Zamówień",
-            theme=gr.themes.Soft(),
-            favicon="☕",
+            title="☕ Kawiarnia AI - Asystent Zamówień", theme=gr.themes.Soft()
         ) as gui:
 
             # Dodanie tytułu aplikacji
@@ -185,7 +183,13 @@ def main():
     print("🚀 Uruchamianie aplikacji Kawiarnia AI...")
     print("📝 Pamiętaj, aby utworzyć plik .env z kluczem OPENAI_API_KEY")
 
-    interface.launch(share=False, debug=True, server_name="127.0.0.1", server_port=7860)
+    interface.launch(
+        share=False,
+        debug=True,
+        server_name="127.0.0.1",
+        server_port=7860,
+        favicon_path="coffee.svg",
+    )
 
 
 if __name__ == "__main__":
