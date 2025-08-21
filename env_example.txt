@@ -1,0 +1,4 @@
+# Przykładowy plik .env
+# Skopiuj ten plik jako .env i wstaw swój klucz API OpenAI
+
+OPENAI_API_KEY=sk-your-openai-api-key-here
