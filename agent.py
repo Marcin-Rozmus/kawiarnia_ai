@@ -469,13 +469,26 @@ class Agent:
         total_revenue = self.state["total_revenue"]
         self.state = initialize_state(orders_completed, total_revenue)
 
-    def get_conversation_log(self) -> List[Dict]:
-        """Zwraca pełny log konwersacji i metryki"""
+    def get_conversation_log(self) -> str:
+        """Zwraca pełny log konwersacji i metryki w formacie JSON"""
 
-        # Tworzy log konwersacji z metrykami
-        converstion_log = f"Orders completed: {self.state['orders_completed']}\nTotal revenue: {self.state['total_revenue']}\n"
-        converstion_log += "\n".join(self.state["conversation_log"])
-        return converstion_log
+        # Tworzy strukturę JSON z logami i metrykami
+        log_data = {
+            "metrics": {
+                "orders_completed": self.state["orders_completed"],
+                "total_revenue": self.state["total_revenue"],
+            },
+            "conversation_log": self.state["conversation_log"],
+            "cart_summary": self.get_cart_summary(),
+            "current_state": {
+                "intent": self.state["intent"],
+                "order_complete": self.state["order_complete"],
+                "current_order": self.state["current_order"],
+            },
+        }
+
+        # Zwróć sformatowany JSON
+        return json.dumps(log_data, indent=2, ensure_ascii=False)
 
     def clear_conversation_log(self):
         """Czyści log konwersacji"""

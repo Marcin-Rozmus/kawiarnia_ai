@@ -27,10 +27,8 @@ class CoffeeShopGUI:
         # Pobierz historię rozmowy
         conversation_log = self.agent.get_conversation_log()
 
-        # Przekształć historię rozmowy na tekst
-        log_text = ""
-        for i, entry in enumerate(conversation_log, 1):
-            log_text += f"{i}: {entry}\n"
+        # Log jest już w formacie JSON, więc możemy go użyć bezpośrednio
+        log_text = conversation_log
 
         # Zwróć odpowiedź, historię rozmowy, informacje o koszyku i log działania aplikacji
         return "", history, cart_info, log_text
@@ -76,13 +74,14 @@ class CoffeeShopGUI:
     def reset_agent(self):
         """Resetuje stan agenta"""
         self.agent.reset()
-        return "🛒 Koszyk jest pusty", "📝 Brak logów"
+        return "🛒 Koszyk jest pusty", self.agent.get_conversation_log()
 
     def create_interface(self):
         """Tworzy interfejs Gradio"""
         with gr.Blocks(
             title="☕ Kawiarnia AI - Asystent Zamówień",
             theme=gr.themes.Soft(),
+            favicon="☕",
         ) as gui:
 
             # Dodanie tytułu aplikacji
@@ -170,7 +169,9 @@ class CoffeeShopGUI:
                 self.reset_agent, outputs=[cart_display, conversation_log_display]
             )
             clear_log_btn.click(
-                self.agent.clear_conversation_log, outputs=[conversation_log_display]
+                lambda: self.agent.clear_conversation_log()
+                or self.agent.get_conversation_log(),
+                outputs=[conversation_log_display],
             )
 
         return gui
